@@ -35,15 +35,15 @@ public class TaskManager {
         return new ArrayList<>(this.subtasks.values());
     }
 
-    private Task getTaskById(int id) {
+    public Task getTaskById(int id) {
         return this.tasks.get(id);
     }
 
-    private Epic getEpicById(int id) {
+    public Epic getEpicById(int id) {
         return this.epics.get(id);
     }
 
-    private ArrayList<Subtask> getSubtasksByEpicId(int epicId){
+    public ArrayList<Subtask> getSubtasksByEpicId(int epicId){
         Epic epic = this.getEpicById(epicId);
         if(epic != null){
             ArrayList<Subtask> subtasks = new ArrayList<>();
@@ -58,8 +58,8 @@ public class TaskManager {
         }
     }
 
-    private Subtask getSubtaskById(int id) {
-        ;return this.subtasks.get(id);
+    public Subtask getSubtaskById(int id) {
+        return this.subtasks.get(id);
     }
 
     /* End Get */
