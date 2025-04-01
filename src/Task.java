@@ -1,8 +1,8 @@
 public class Task {
-    private int id;
-    private String name;
-    private TaskStatus status;
-    private String description;
+    protected int id;
+    protected String name;
+    protected TaskStatus status;
+    protected String description;
 
     @Override
     public String toString() {
