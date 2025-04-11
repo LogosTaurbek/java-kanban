@@ -4,7 +4,9 @@ public class Main {
         System.out.println("Трекер задач");
 
         /* Create 2 task */
-        TaskManager taskManager = new TaskManager();
+        Managers taskManagerUtil = new Managers();
+        TaskManager taskManager = taskManagerUtil.getDefault();
+
         Task task1 = new Task("Задача 1", "Описание задачи 1.");
         int task1_id = taskManager.createTask(task1);
         Task task2 = new Task("Задача 2", "Описание задачи 2.");
@@ -29,5 +31,14 @@ public class Main {
         System.out.println(taskManager.getTasks());
         System.out.println(taskManager.getEpics());
         System.out.println(taskManager.getSubtasks());
+        printHistory(taskManager);
+
+    }
+
+    private static void printHistory(TaskManager taskManager) {
+        System.out.println("История просмотра задач:");
+        for (Task historyItem : taskManager.getHistory()) {
+            System.out.println(historyItem);
+        }
     }
 }
