@@ -1,9 +1,12 @@
+package model;
+
 import org.junit.jupiter.api.Test;
+
 import java.util.ArrayList;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class EpicTest {
-
     @Test
     void testEpicEquals() {
         ArrayList<Integer> subtasks1 = new ArrayList<>();

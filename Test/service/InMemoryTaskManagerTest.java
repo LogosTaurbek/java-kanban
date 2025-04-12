@@ -1,7 +1,10 @@
+package service;
+
+import model.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class InMemoryTaskManagerTest {
     static TaskManager taskManager;
@@ -78,7 +81,6 @@ class InMemoryTaskManagerTest {
         assertEquals(subtask.getDescription(), subtask1.getDescription());
     }
 
-    // проверьте, что задачи с заданным id и сгенерированным id не конфликтуют внутри менеджера;
     @Test
     void testTaskIds() {
         Task task = new Task("task name 1", "task description 1");
@@ -90,7 +92,6 @@ class InMemoryTaskManagerTest {
         assertNotEquals(id, new_id);
     }
 
-    // создайте тест, в котором проверяется неизменность задачи (по всем полям) при добавлении задачи в менеджер
     @Test
     void testTaskDoesNotChangeAfterAdding() {
         Task task = new Task("task name", "task description");

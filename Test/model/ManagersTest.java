@@ -1,6 +1,10 @@
-import org.junit.jupiter.api.Test;
+package model;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import history.HistoryManager;
+import org.junit.jupiter.api.Test;
+import service.TaskManager;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 class ManagersTest {
     @Test
