@@ -4,6 +4,8 @@ import model.Subtask;
 import model.Task;
 import service.TaskManager;
 
+import java.util.HashMap;
+
 public class Main {
 
     public static void main(String[] args) {
@@ -43,7 +45,7 @@ public class Main {
 
     private static void printHistory(TaskManager taskManager) {
         System.out.println("История просмотра задач:");
-        for (Task historyItem : taskManager.getHistory()) {
+        for (HashMap historyItem : taskManager.getHistory()) {
             System.out.println(historyItem);
         }
     }

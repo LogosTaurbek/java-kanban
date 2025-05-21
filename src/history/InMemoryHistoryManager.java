@@ -1,30 +1,37 @@
 package history;
 
 import model.Task;
+import model.Node;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashMap;
 
 public class InMemoryHistoryManager implements HistoryManager {
-    private List<Task> taskHistory;
+    private HashMap<Integer, Task> taskHistory;
 
     public InMemoryHistoryManager() {
-        taskHistory = new ArrayList<>();
+        taskHistory = new HashMap<>();
     }
 
     @Override
-    public List<Task> getHistory() {
+    public HashMap<Integer, Task> getHistory() {
         return this.taskHistory;
     }
 
     @Override
     public void add(Task task) {
         if(task != null){
-            if (this.taskHistory.size() == 10) {
-                this.taskHistory.removeFirst();
+            if (this.taskHistory.get(task.getId()) != null){
+                this.taskHistory.remove(task.getId());
             }
-            this.taskHistory.add(task);
+            this.taskHistory.put(0, task);
         }
+    }
+
+    @Override
+    public void remove(int id){
+
     }
 
 }

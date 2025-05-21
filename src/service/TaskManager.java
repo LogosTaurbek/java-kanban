@@ -4,6 +4,7 @@ import model.Epic;
 import model.Subtask;
 import model.Task;
 
+import java.util.HashMap;
 import java.util.List;
 
 public interface TaskManager {
@@ -45,5 +46,5 @@ public interface TaskManager {
 
     List<Subtask> getSubtasksByEpicId(int epicId);
 
-    List<Task> getHistory();
+    HashMap<Integer, Task> getHistory();
 }
