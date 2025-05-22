@@ -3,6 +3,7 @@ package history;
 import model.Task;
 import model.Node;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public interface HistoryManager {
@@ -11,5 +12,5 @@ public interface HistoryManager {
 
     void remove(int id);
 
-    HashMap<Integer, Task> getHistory();
+    ArrayList<Task> getHistory();
 }

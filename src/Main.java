@@ -45,7 +45,7 @@ public class Main {
 
     private static void printHistory(TaskManager taskManager) {
         System.out.println("История просмотра задач:");
-        for (HashMap historyItem : taskManager.getHistory()) {
+        for (Task historyItem : taskManager.getHistory()) {
             System.out.println(historyItem);
         }
     }
