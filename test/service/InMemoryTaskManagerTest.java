@@ -86,7 +86,7 @@ class InMemoryTaskManagerTest {
         Task task = new Task("task name 1", "task description 1");
         int id = taskManager.createTask(task);
 
-        Task taskWithConflictingId = new Task(id,"task name 2", "task description 2", TaskStatus.IN_PROGRESS);
+        Task taskWithConflictingId = new Task(id, "task name 2", "task description 2", TaskStatus.IN_PROGRESS);
         int new_id = taskManager.createTask(taskWithConflictingId);
 
         assertNotEquals(id, new_id);

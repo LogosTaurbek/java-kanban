@@ -18,13 +18,13 @@ public class Task {
         return str;
     }
 
-    public Task(String name, String description){
+    public Task(String name, String description) {
         this.name = name;
         this.description = description;
         this.status = TaskStatus.NEW;
     }
 
-    public Task(int id, String name, String description, TaskStatus status){
+    public Task(int id, String name, String description, TaskStatus status) {
         this.id = id;
         this.name = name;
         this.description = description;
