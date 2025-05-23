@@ -29,13 +29,13 @@ public class Epic extends Task {
         return subtasksIds;
     }
 
-    public void removeAllSubtasks() {this.subtasksIds.clear(); }
+    public void removeAllSubtasks() { this.subtasksIds.clear(); }
 
     public void addSubtaskId(int subtaskId){
         this.subtasksIds.add(subtaskId);
     }
 
-    public void removeSubtaskId(int subtaskIdToRemove){
+    public void removeSubtaskId( int subtaskIdToRemove ){
         this.subtasksIds.remove((Integer) subtaskIdToRemove);
     }
 

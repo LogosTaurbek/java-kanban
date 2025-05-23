@@ -6,9 +6,9 @@ public class Node {
     protected Node nextNode;
 
     public Node(Node prevNode, Task task, Node nextNode) {
-            this.prevNode = prevNode;
-            this.task = task;
-            this.nextNode = nextNode;
+        this.prevNode = prevNode;
+        this.task = task;
+        this.nextNode = nextNode;
     }
 
     public Node getPrevNode() {
