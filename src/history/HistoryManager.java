@@ -1,10 +1,8 @@
 package history;
 
 import model.Task;
-import model.Node;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public interface HistoryManager {
 
