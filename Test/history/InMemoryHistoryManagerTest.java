@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class InMemoryHistoryManagerTest {
     @Test
-    void hisotryManagerLinksTask(){
+    void hisotryManagerLinksTask() {
         Managers taskManagerUtil = new Managers();
         TaskManager taskManager = taskManagerUtil.getDefault();
         Task task = new Task("name v1", "descriptoin");
@@ -25,7 +25,7 @@ public class InMemoryHistoryManagerTest {
     }
 
     @Test
-    void historyManagerRemoveTask(){
+    void historyManagerRemoveTask() {
         Managers taskManagerUtil = new Managers();
         TaskManager taskManager = taskManagerUtil.getDefault();
         Task task = new Task("name v1", "description");
@@ -38,7 +38,7 @@ public class InMemoryHistoryManagerTest {
     }
 
     @Test
-    void historyManagerDoesNotDuplicateTask(){
+    void historyManagerDoesNotDuplicateTask() {
         Managers taskManagerUtil = new Managers();
         TaskManager taskManager = taskManagerUtil.getDefault();
         Task task = new Task("name v1", "description");

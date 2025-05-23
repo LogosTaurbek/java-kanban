@@ -62,7 +62,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public ArrayList<Subtask> getSubtasksByEpicId(int epicId){
+    public ArrayList<Subtask> getSubtasksByEpicId(int epicId) {
         Epic epic = this.getEpicById(epicId);
         if(epic != null){
             ArrayList<Subtask> subtasks = new ArrayList<>();
@@ -157,7 +157,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
-    private void updateEpicStatus(Epic epic){
+    private void updateEpicStatus(Epic epic) {
         if (epic.getSubtaskIds().isEmpty()) {
             epic.setStatus(TaskStatus.NEW);
             return;
