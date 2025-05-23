@@ -1,10 +1,12 @@
 package history;
+
 import model.Managers;
 import model.Task;
 import model.TaskStatus;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 import service.TaskManager;
 
 import java.util.ArrayList;
@@ -44,7 +46,7 @@ public class InMemoryHistoryManagerTest {
         Task task = new Task("name v1", "description");
         int taskId = taskManager.createTask(task);
         Task taskV1 = taskManager.getTaskById(taskId);
-        Task task_update = new Task( task.getId(), task.getName(), task.getDescription(), TaskStatus.IN_PROGRESS);
+        Task task_update = new Task(task.getId(), task.getName(), task.getDescription(), TaskStatus.IN_PROGRESS);
         taskManager.updateTask(task_update);
         Task taskV2 = taskManager.getTaskById(taskId);
 

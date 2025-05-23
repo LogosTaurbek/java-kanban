@@ -14,7 +14,7 @@ class EpicTest {
         ArrayList<Integer> subtasks2 = new ArrayList<>();
         subtasks2.add(2);
         Epic epic1 = new Epic(1, "name1", "description1", TaskStatus.NEW, subtasks1);
-        Epic epic2 = new Epic(1, "name2", "description2",  TaskStatus.IN_PROGRESS, subtasks2);
+        Epic epic2 = new Epic(1, "name2", "description2", TaskStatus.IN_PROGRESS, subtasks2);
         assertEquals(epic1, epic2);
     }
 }
