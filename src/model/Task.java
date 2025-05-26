@@ -71,6 +71,4 @@ public class Task {
         Task otherTask = (Task) obj;
         return Objects.equals(this.id, otherTask.getId());
     }
-
-
 }
