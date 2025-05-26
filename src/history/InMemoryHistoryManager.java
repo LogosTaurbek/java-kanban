@@ -24,13 +24,10 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public void add(Task task) {
-        if (task != null) {
-            if (this.taskHistory.get(task.getId()) != null) {
-                this.taskHistory.remove(task.getId());
-                this.removeNode(this.taskHistory.get(task.getId()));
-            }
-            this.linkLast(task);
+        if (this.taskHistory.containsKey(task.getId())) {
+            this.removeNode(this.taskHistory.get(task.getId()));
         }
+        this.linkLast(task);
     }
 
     @Override

@@ -3,10 +3,7 @@ package service;
 import history.HistoryManager;
 import model.*;
 
-import java.util.List;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
 
@@ -194,6 +191,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void removeTaskById(int taskId) {
         this.tasks.remove(taskId);
+        this.historyManager.remove(taskId);
     }
 
     @Override
@@ -205,6 +203,7 @@ public class InMemoryTaskManager implements TaskManager {
                 this.subtasks.remove(subtaskId);
             }
             this.epics.remove(epicId);
+            this.historyManager.remove(epicId);
         }
     }
 
@@ -216,6 +215,7 @@ public class InMemoryTaskManager implements TaskManager {
             epic.removeSubtaskId(idToRemove);
             this.updateEpicStatus(epic);
             this.subtasks.remove(idToRemove);
+            this.historyManager.remove(idToRemove);
         }
     }
 
@@ -232,6 +232,14 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void removeAllSubtasks() {
+        HashSet<Epic> epics = new HashSet<>();
+        for (Subtask subtask : this.getSubtasks()) {
+            Epic connectedEpic = this.getEpicById(subtask.getEpicId());
+            epics.add(connectedEpic);
+            int subtaskId = subtask.getId();
+            connectedEpic.removeSubtaskId(subtaskId);
+            this.historyManager.remove(subtaskId);
+        }
         for (Epic epic : this.getEpics()) {
             epic.removeAllSubtasks();
             this.updateEpicStatus(epic);

@@ -36,7 +36,7 @@ public class InMemoryHistoryManagerTest {
         taskManager.removeTaskById(taskId);
 
         List<Task> history = taskManager.getHistory();
-        assertEquals(1, history.size());
+        assertEquals(0, history.size());
     }
 
     @Test
