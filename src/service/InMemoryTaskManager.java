@@ -60,7 +60,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public ArrayList<Subtask> getSubtasksByEpicId(int epicId) {
-        Epic epic = this.getEpicById(epicId);
+        Epic epic = this.epics.get(epicId);
         if (epic != null) {
             ArrayList<Subtask> subtasks = new ArrayList<>();
             ArrayList<Integer> subtaskIds = epic.getSubtaskIds();
@@ -81,7 +81,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public List<Task> getHistory() {
-        return this.getTasks();
+        return this.historyManager.getHistory();
     }
 
     /* End Get */
@@ -104,7 +104,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public int createSubtask(Subtask subtask) {
 
-        Epic connectedEpic = getEpicById(subtask.getEpicId());
+        Epic connectedEpic = this.epics.get(subtask.getEpicId());
         if (connectedEpic != null) {
             subtask.setId(this.getCurrentTaskId());
             this.subtasks.put(subtask.getId(), subtask);
@@ -130,7 +130,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void updateEpic(Epic epic) {
-        Epic epicToUpdate = this.getEpicById(epic.getId());
+        Epic epicToUpdate = this.epics.get(epic.getId());
         if (epicToUpdate != null) {
             epicToUpdate.setName(epic.getName());
             epicToUpdate.setDescription(epic.getDescription());
@@ -148,7 +148,7 @@ public class InMemoryTaskManager implements TaskManager {
             updatedSubtask.setName(subtask.getName());
             updatedSubtask.setDescription(subtask.getDescription());
             updatedSubtask.setStatus(subtask.getStatus());
-            Epic epicToUpdate = this.getEpicById(subtask.getEpicId());
+            Epic epicToUpdate = this.epics.get(subtask.getEpicId());
             this.updateEpicStatus(epicToUpdate);
         }
     }
@@ -211,7 +211,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void removeSubtaskById(int idToRemove) {
         Subtask subtaskToRemove = this.subtasks.get(idToRemove);
         if (subtaskToRemove != null) {
-            Epic epic = this.getEpicById(subtaskToRemove.getEpicId());
+            Epic epic = this.epics.get(subtaskToRemove.getEpicId());
             epic.removeSubtaskId(idToRemove);
             this.updateEpicStatus(epic);
             this.subtasks.remove(idToRemove);
@@ -220,12 +220,19 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void removeALlTasks() {
+    public void removeAllTasks() {
+        for (Task task : this.getTasks()) {
+            this.historyManager.remove(task.getId());
+        }
         this.tasks.clear();
+
     }
 
     @Override
-    public void removeALlEpics() {
+    public void removeAllEpics() {
+        for (Epic epic : this.getEpics()) {
+            this.historyManager.remove(epic.getId());
+        }
         this.epics.clear();
         this.subtasks.clear();
     }
@@ -234,7 +241,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void removeAllSubtasks() {
         HashSet<Epic> epics = new HashSet<>();
         for (Subtask subtask : this.getSubtasks()) {
-            Epic connectedEpic = this.getEpicById(subtask.getEpicId());
+            Epic connectedEpic = this.epics.get(subtask.getEpicId());
             epics.add(connectedEpic);
             int subtaskId = subtask.getId();
             connectedEpic.removeSubtaskId(subtaskId);
