@@ -139,7 +139,7 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void updateSubtask(Subtask subtask) {
-        Subtask subtaskToUpdate = this.getSubtaskById(subtask.getId());
+        Subtask subtaskToUpdate = this.subtasks.get(subtask.getId());
         if (subtaskToUpdate == null) {
             return;
         }
@@ -232,6 +232,9 @@ public class InMemoryTaskManager implements TaskManager {
     public void removeAllEpics() {
         for (Epic epic : this.getEpics()) {
             this.historyManager.remove(epic.getId());
+        }
+        for (Subtask subtask : this.getSubtasks()) {
+            this.historyManager.remove(subtask.getId());
         }
         this.epics.clear();
         this.subtasks.clear();
