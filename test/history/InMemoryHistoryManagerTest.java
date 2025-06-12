@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import service.TaskManager;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class InMemoryHistoryManagerTest {
     @Test
@@ -20,7 +20,7 @@ public class InMemoryHistoryManagerTest {
         int taskId = taskManager.createTask(task);
         Task taskV1 = taskManager.getTaskById(taskId);
 
-        ArrayList<Task> history = taskManager.getHistory();
+        List<Task> history = taskManager.getHistory();
 
         assertEquals(1, history.size());
         assertEquals(task, history.getLast());
@@ -35,8 +35,8 @@ public class InMemoryHistoryManagerTest {
         Task taskV1 = taskManager.getTaskById(taskId);
         taskManager.removeTaskById(taskId);
 
-        ArrayList<Task> history = taskManager.getHistory();
-        assertEquals(1, history.size());
+        List<Task> history = taskManager.getHistory();
+        assertEquals(0, history.size());
     }
 
     @Test
@@ -50,7 +50,7 @@ public class InMemoryHistoryManagerTest {
         taskManager.updateTask(task_update);
         Task taskV2 = taskManager.getTaskById(taskId);
 
-        ArrayList<Task> history = taskManager.getHistory();
+        List<Task> history = taskManager.getHistory();
 
         assertEquals(1, history.size());
         assertEquals(task, history.getLast());

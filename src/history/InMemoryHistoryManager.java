@@ -6,10 +6,11 @@ import model.Node;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 
 public class InMemoryHistoryManager implements HistoryManager {
-    private HashMap<Integer, Node> taskHistory;
-    Node lastNode;
+    private Map<Integer, Node> taskHistory;
+    private Node lastNode;
 
     public InMemoryHistoryManager() {
         taskHistory = new HashMap<>();
@@ -17,15 +18,15 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 
     @Override
-    public ArrayList getHistory() {
+    public ArrayList<Task> getHistory() {
         return this.getTasks();
     }
 
     @Override
     public void add(Task task) {
         if (task != null) {
-            if (this.taskHistory.get(task.getId()) != null) {
-                this.taskHistory.remove(task.getId());
+            if (this.taskHistory.containsKey(task.getId())) {
+                this.removeNode(this.taskHistory.get(task.getId()));
             }
             this.linkLast(task);
         }
