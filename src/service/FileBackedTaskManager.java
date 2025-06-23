@@ -4,8 +4,10 @@ import jdk.jshell.Snippet;
 import model.*;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
@@ -15,6 +17,28 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     public FileBackedTaskManager (String backupFilePath) {
         super();
         this.backUpFilePath = backupFilePath;
+    }
+
+    public static FileBackedTaskManager loadFromFile(File file){
+        String rawBackUp = "";
+        try {
+            rawBackUp = Files.readString(file.toPath());
+        } catch (IOException e){
+            System.out.println("Error in reading from file "+ file.getName());
+        }
+        FileBackedTaskManager tm = new FileBackedTaskManager(file.getPath());
+        String[] taskStrs = rawBackUp.split("\n");
+        for(int i = 0; i < taskStrs.length; i++){
+            Task taskFromStr = tm.fromString(taskStrs[i]);
+            if(taskFromStr instanceof Epic){
+                tm.addEpicFromFile((Epic) taskFromStr);
+            } else if (taskFromStr instanceof Subtask) {
+                tm.addSubtaskFromFile((Subtask) taskFromStr);
+            } else {
+                tm.addTaskFromFile(taskFromStr);
+            }
+        }
+        return  tm;
     }
 
     /* Create */
@@ -80,6 +104,25 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         this.save();
     }
 
+    protected void updateEpicStatus(Epic epic) {
+        super.updateEpicStatus(epic);
+    }
+
+    private void addTaskFromFile(Task task){
+        this.tasks.put(task.getId(), task);
+    }
+
+    private void addEpicFromFile(Epic newEpic){
+        this.epics.put(newEpic.getId(), newEpic);
+    }
+
+    private void addSubtaskFromFile(Subtask subtask){
+        this.subtasks.put(subtask.getId(), subtask);
+        Epic connectedEpic = getEpicById(subtask.getEpicId());
+        connectedEpic.addSubtaskId(subtask.getId());
+        this.updateEpicStatus(connectedEpic);
+    }
+
     private String taskToCSV (Task task) {
         String id = String.valueOf(task.getId());
         String type = task.getClass().getName();
@@ -136,4 +179,5 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
         return  result;
     }
+
 }

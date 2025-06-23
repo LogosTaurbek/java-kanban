@@ -9,8 +9,8 @@ public class InMemoryTaskManager implements TaskManager {
 
     private int taskId = 0;
     protected Map<Integer, Task> tasks;
-    private Map<Integer, Subtask> subtasks;
-    private Map<Integer, Epic> epics;
+    protected Map<Integer, Subtask> subtasks;
+    protected Map<Integer, Epic> epics;
     HistoryManager historyManager;
 
     public InMemoryTaskManager() {
@@ -153,7 +153,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
     }
 
-    private void updateEpicStatus(Epic epic) {
+    protected void updateEpicStatus(Epic epic) {
         if (epic.getSubtaskIds().isEmpty()) {
             epic.setStatus(TaskStatus.NEW);
             return;
