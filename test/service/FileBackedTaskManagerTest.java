@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.io.File;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import service.FileBackedTaskManager;
@@ -36,13 +37,13 @@ class FileBackedTaskManagerTest {
             System.out.println("ОШибка при создании временного файла для тестов.");
         }
         taskManager = (FileBackedTaskManager) taskManagersUtil.getFileBackedTaskManager(tmpFilePath);
-        task1 = new Task("name", "task description");
+        task1 = new Task("task name 1", "task description 1");
         taskId1 = taskManager.createTask(task1);
 
-        epic1 = new Epic("Epic name 1", "epic description");
-        epicId1 = taskManager.createTask(epic1);
+        epic1 = new Epic("epic name 1", "description");
+        epicId1 = taskManager.createEpic(epic1);
 
-        subtask1 = new Subtask("Subtask name 1", "Subtask description 1", epicId1);
+        subtask1 = new Subtask("subtask name 1", "Subtask description 1", epicId1);
         subtaskId1 = taskManager.createSubtask(subtask1);
     }
 
@@ -57,7 +58,7 @@ class FileBackedTaskManagerTest {
 
     @Test
     void testCreateEpic() {
-        Epic epic = new Epic("name", "description");
+        Epic epic = new Epic("epic name 1", "description");
         taskManager.createTask(epic);
         Epic createdEpic = taskManager.getEpics().getLast();
 
@@ -69,8 +70,9 @@ class FileBackedTaskManagerTest {
     void testCreateSubtask() {
         Subtask subtask = new Subtask("name", "description", epicId1);
         taskManager.createSubtask(subtask);
-        Subtask createdSubtask = taskManager.getSubtasks().getLast();
-
+        //if(taskManager.getSubtasks().size() > 0) {
+            Subtask createdSubtask = taskManager.getSubtasks().getLast();
+        //}
         assertEquals(subtask.getName(), createdSubtask.getName());
         assertEquals(subtask.getDescription(), createdSubtask.getDescription());
     }
@@ -107,7 +109,7 @@ class FileBackedTaskManagerTest {
         assertEquals(task.getStatus(), taskAdded.getStatus());
     }
 
-    @Test
+   @Test
     void testSaveLoadEmptyFile() {
         Managers taskManagerUtil = new Managers();
         try {
@@ -128,5 +130,51 @@ class FileBackedTaskManagerTest {
         assertNotNull(emptyTaskManager.getTasks());
         assertNotNull(emptyTaskManager.getEpics());
         assertNotNull(emptyTaskManager.getSubtasks());
+    }
+
+    @Test
+    void testSaveTasks() {
+        Managers taskManagerUtil = new Managers();
+        try {
+            tmpFilePath = File.createTempFile("empty_tasks", ".csv").getPath();
+        }
+        catch(IOException e){
+            System.out.println("Error in create temp file for tests");
+        }
+        taskManager = (FileBackedTaskManager) taskManagerUtil.getFileBackedTaskManager(tmpFilePath);
+        task1 = new Task("task name 1", "task description 1");
+        taskId1 = taskManager.createTask(task1);
+        Task task2 = new Task("task name 2", "task description 2");
+        int taskId2 = taskManager.createTask(task2);
+        long linesCount = 0;
+        try {
+            linesCount = Files.lines(Paths.get(tmpFilePath), Charset.defaultCharset()).count();
+        }
+        catch (IOException e){
+            System.out.println("Error in read temp file for test");
+        }
+
+        assertEquals(3, linesCount);
+    }
+
+    @Test
+    void testLoadTasks(){
+        Managers taskManagerUtil = new Managers();
+        try {
+            tmpFilePath = File.createTempFile("empty_tasks", ".csv").getPath();
+        }
+        catch(IOException e){
+            System.out.println("Error in create temp file for tests");
+        }
+        taskManager = (FileBackedTaskManager) taskManagerUtil.getFileBackedTaskManager(tmpFilePath);
+        task1 = new Task("task name 1", "task description 1");
+        taskId1 = taskManager.createTask(task1);
+        Task task2 = new Task("task name 2", "task description 2");
+        int taskId2 = taskManager.createTask(task2);
+
+        File fileObj = new File(tmpFilePath);
+        taskManager = FileBackedTaskManager.loadFromFile(fileObj);
+
+        assertEquals(2, taskManager.getTasks().size());
     }
 }

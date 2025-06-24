@@ -27,8 +27,11 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             System.out.println("Error in reading from file "+ file.getName());
         }
         FileBackedTaskManager tm = new FileBackedTaskManager(file.getPath());
+
         String[] taskStrs = rawBackUp.split("\n");
-        for(int i = 0; i < taskStrs.length; i++){
+        System.out.println("STRING"+taskStrs.length);
+
+        for (int i = 0; i < taskStrs.length; i++){
             Task taskFromStr = tm.fromString(taskStrs[i]);
             if(taskFromStr instanceof Epic){
                 tm.addEpicFromFile((Epic) taskFromStr);
@@ -60,6 +63,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     public int createSubtask(Subtask subtask) {
         super.createSubtask(subtask);
         this.save();
+        System.out.println("Subtask id"+subtask.getId());
         return subtask.getId();
 
     }
@@ -139,7 +143,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     private void save () {
         ArrayList<String> csvLines = new ArrayList<>();
-        csvLines.add("id, type, name, status, descriptions, epic, startTime,duration");
+        csvLines.add("id, type, name, status, descriptions, epic");
         for(Task task : this.getTasks()){
             csvLines.add(this.taskToCSV(task));
         }
