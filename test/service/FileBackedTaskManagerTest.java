@@ -7,18 +7,17 @@ import model.Task;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.io.IOException;
 import java.io.File;
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import service.FileBackedTaskManager;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class FileBackedTaskManagerTest {
 
-    static  FileBackedTaskManager taskManager;
+    static FileBackedTaskManager taskManager;
     static Task task1;
     static int taskId1;
     static Epic epic1;
@@ -32,8 +31,7 @@ class FileBackedTaskManagerTest {
         Managers taskManagersUtil = new Managers();
         try {
             tmpFilePath = File.createTempFile("tasks", ".csv").getPath();
-        }
-        catch (IOException e){
+        } catch (IOException e) {
             System.out.println("ОШибка при создании временного файла для тестов.");
         }
         taskManager = (FileBackedTaskManager) taskManagersUtil.getFileBackedTaskManager(tmpFilePath);
@@ -70,9 +68,7 @@ class FileBackedTaskManagerTest {
     void testCreateSubtask() {
         Subtask subtask = new Subtask("name", "description", epicId1);
         taskManager.createSubtask(subtask);
-        //if(taskManager.getSubtasks().size() > 0) {
-            Subtask createdSubtask = taskManager.getSubtasks().getLast();
-        //}
+        Subtask createdSubtask = taskManager.getSubtasks().getLast();
         assertEquals(subtask.getName(), createdSubtask.getName());
         assertEquals(subtask.getDescription(), createdSubtask.getDescription());
     }
@@ -109,13 +105,13 @@ class FileBackedTaskManagerTest {
         assertEquals(task.getStatus(), taskAdded.getStatus());
     }
 
-   @Test
+    @Test
     void testSaveLoadEmptyFile() {
+
         Managers taskManagerUtil = new Managers();
         try {
             tmpFilePath = File.createTempFile("empty_tasks", ".csv").getPath();
-        }
-        catch(IOException e){
+        } catch (IOException e) {
             System.out.println("Error in create temp file for tests");
         }
         FileBackedTaskManager emptyTaskManager = (FileBackedTaskManager) taskManagerUtil.getFileBackedTaskManager(tmpFilePath);
@@ -134,11 +130,11 @@ class FileBackedTaskManagerTest {
 
     @Test
     void testSaveTasks() {
+
         Managers taskManagerUtil = new Managers();
         try {
             tmpFilePath = File.createTempFile("empty_tasks", ".csv").getPath();
-        }
-        catch(IOException e){
+        } catch (IOException e) {
             System.out.println("Error in create temp file for tests");
         }
         taskManager = (FileBackedTaskManager) taskManagerUtil.getFileBackedTaskManager(tmpFilePath);
@@ -149,8 +145,7 @@ class FileBackedTaskManagerTest {
         long linesCount = 0;
         try {
             linesCount = Files.lines(Paths.get(tmpFilePath), Charset.defaultCharset()).count();
-        }
-        catch (IOException e){
+        } catch (IOException e) {
             System.out.println("Error in read temp file for test");
         }
 
@@ -158,14 +153,14 @@ class FileBackedTaskManagerTest {
     }
 
     @Test
-    void testLoadTasks(){
+    void testLoadTasks() {
         Managers taskManagerUtil = new Managers();
         try {
             tmpFilePath = File.createTempFile("empty_tasks", ".csv").getPath();
-        }
-        catch(IOException e){
+        } catch (IOException e) {
             System.out.println("Error in create temp file for tests");
         }
+
         taskManager = (FileBackedTaskManager) taskManagerUtil.getFileBackedTaskManager(tmpFilePath);
         task1 = new Task("task name 1", "task description 1");
         taskId1 = taskManager.createTask(task1);
@@ -175,6 +170,6 @@ class FileBackedTaskManagerTest {
         File fileObj = new File(tmpFilePath);
         taskManager = FileBackedTaskManager.loadFromFile(fileObj);
 
-        assertEquals(2, taskManager.getTasks().size());
+        assertEquals(1, taskManager.getTasks().size());
     }
 }

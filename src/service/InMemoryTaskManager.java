@@ -41,7 +41,6 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public List<Subtask> getSubtasks() {
-        System.out.println("Subtask size"+this.subtasks.size());
         return new ArrayList<>(this.subtasks.values());
     }
 
@@ -104,17 +103,13 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public int createSubtask(Subtask subtask) {
-        System.out.println("Subtask epic id"+subtask.getEpicId());
         Epic connectedEpic = this.epics.get(subtask.getEpicId());
         subtask.setId(this.getCurrentTaskId());
         if (connectedEpic != null) {
-            System.out.println("EPIC YES");
-
             this.subtasks.put(subtask.getId(), subtask);
             connectedEpic.addSubtaskId(subtask.getId());
             this.updateEpicStatus(connectedEpic);
         } else {
-            System.out.println("EPIC NO");
             return -1;
         }
         return subtask.getId();
