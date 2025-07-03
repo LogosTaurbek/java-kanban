@@ -7,13 +7,14 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import service.ManagerSaveException;
 import service.TaskManager;
 
 import java.util.List;
 
 public class InMemoryHistoryManagerTest {
     @Test
-    void hisotryManagerLinksTask() {
+    void hisotryManagerLinksTask() throws ManagerSaveException {
         Managers taskManagerUtil = new Managers();
         TaskManager taskManager = taskManagerUtil.getDefault();
         Task task = new Task("name v1", "descriptoin");
@@ -27,7 +28,7 @@ public class InMemoryHistoryManagerTest {
     }
 
     @Test
-    void historyManagerRemoveTask() {
+    void historyManagerRemoveTask() throws ManagerSaveException {
         Managers taskManagerUtil = new Managers();
         TaskManager taskManager = taskManagerUtil.getDefault();
         Task task = new Task("name v1", "description");
@@ -40,7 +41,7 @@ public class InMemoryHistoryManagerTest {
     }
 
     @Test
-    void historyManagerDoesNotDuplicateTask() {
+    void historyManagerDoesNotDuplicateTask() throws ManagerSaveException {
         Managers taskManagerUtil = new Managers();
         TaskManager taskManager = taskManagerUtil.getDefault();
         Task task = new Task("name v1", "description");

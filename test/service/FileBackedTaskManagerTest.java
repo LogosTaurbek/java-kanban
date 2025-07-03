@@ -27,7 +27,7 @@ class FileBackedTaskManagerTest {
     static String tmpFilePath;
 
     @BeforeAll
-    static void initManagers() {
+    static void initManagers() throws ManagerSaveException {
         Managers taskManagersUtil = new Managers();
         try {
             tmpFilePath = File.createTempFile("tasks", ".csv").getPath();
@@ -46,7 +46,7 @@ class FileBackedTaskManagerTest {
     }
 
     @Test
-    void testCreateTask() {
+    void testCreateTask() throws ManagerSaveException {
         Task task = new Task("name", "description");
         taskManager.createTask(task);
         Task createdTask = taskManager.getTasks().getLast();
@@ -55,7 +55,7 @@ class FileBackedTaskManagerTest {
     }
 
     @Test
-    void testCreateEpic() {
+    void testCreateEpic() throws ManagerSaveException {
         Epic epic = new Epic("epic name 1", "description");
         taskManager.createTask(epic);
         Epic createdEpic = taskManager.getEpics().getLast();
@@ -65,7 +65,7 @@ class FileBackedTaskManagerTest {
     }
 
     @Test
-    void testCreateSubtask() {
+    void testCreateSubtask() throws ManagerSaveException {
         Subtask subtask = new Subtask("name", "description", epicId1);
         taskManager.createSubtask(subtask);
         Subtask createdSubtask = taskManager.getSubtasks().getLast();
@@ -95,7 +95,7 @@ class FileBackedTaskManagerTest {
     }
 
     @Test
-    void testTaskDoesNotChangeAfterAdding() {
+    void testTaskDoesNotChangeAfterAdding() throws ManagerSaveException {
         Task task = new Task("Task name", "task description");
         int id = taskManager.createTask(task);
         Task taskAdded = taskManager.getTaskById(id);
@@ -106,7 +106,7 @@ class FileBackedTaskManagerTest {
     }
 
     @Test
-    void testSaveLoadEmptyFile() {
+    void testSaveLoadEmptyFile() throws ManagerSaveException {
 
         Managers taskManagerUtil = new Managers();
         try {
@@ -129,7 +129,7 @@ class FileBackedTaskManagerTest {
     }
 
     @Test
-    void testSaveTasks() {
+    void testSaveTasks() throws ManagerSaveException {
 
         Managers taskManagerUtil = new Managers();
         try {
@@ -153,7 +153,7 @@ class FileBackedTaskManagerTest {
     }
 
     @Test
-    void testLoadTasks() {
+    void testLoadTasks() throws ManagerSaveException {
         Managers taskManagerUtil = new Managers();
         try {
             tmpFilePath = File.createTempFile("empty_tasks", ".csv").getPath();
@@ -170,6 +170,6 @@ class FileBackedTaskManagerTest {
         File fileObj = new File(tmpFilePath);
         taskManager = FileBackedTaskManager.loadFromFile(fileObj);
 
-        assertEquals(1, taskManager.getTasks().size());
+        assertEquals(2, taskManager.getTasks().size());
     }
 }

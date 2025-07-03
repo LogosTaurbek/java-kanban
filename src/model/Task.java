@@ -11,6 +11,7 @@ public class Task {
     @Override
     public String toString() {
         String str = "model.Task{";
+        str += "id='"+this.id+"'";
         str += "title='" + this.name + "'";
         str += ", description='" + this.description + "'";
         str += ", status='" + this.status + "'";
