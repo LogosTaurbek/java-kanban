@@ -120,7 +120,8 @@ class FileBackedTaskManagerTest {
         assertTrue(fileObj.exists());
         assertEquals(0, fileObj.length());
 
-        emptyTaskManager = FileBackedTaskManager.loadFromFile(fileObj);
+        FileBackedTaskManager fb = new FileBackedTaskManager(tmpFilePath);
+        emptyTaskManager = fb.loadFromFile(fileObj);
 
         assertNotNull(emptyTaskManager);
         assertNotNull(emptyTaskManager.getTasks());
@@ -168,7 +169,8 @@ class FileBackedTaskManagerTest {
         int taskId2 = taskManager.createTask(task2);
 
         File fileObj = new File(tmpFilePath);
-        taskManager = FileBackedTaskManager.loadFromFile(fileObj);
+        FileBackedTaskManager fb = new FileBackedTaskManager(tmpFilePath);
+        taskManager = fb.loadFromFile(fileObj);
 
         assertEquals(2, taskManager.getTasks().size());
     }

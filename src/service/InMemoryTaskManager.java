@@ -29,8 +29,8 @@ public class InMemoryTaskManager implements TaskManager {
         return taskId;
     }
 
-    protected static void setTaskId(int taskId) {
-        taskId = taskId;
+    protected void setTaskId(int newTaskId) {
+        this.taskId = newTaskId;
     }
 
     @Override
@@ -224,7 +224,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void removeAllTasks() {
+    public void removeAllTasks() throws ManagerSaveException {
         for (Task task : this.getTasks()) {
             this.historyManager.remove(task.getId());
         }
@@ -233,7 +233,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void removeAllEpics() {
+    public void removeAllEpics() throws ManagerSaveException {
         for (Epic epic : this.getEpics()) {
             this.historyManager.remove(epic.getId());
         }
@@ -245,7 +245,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public void removeAllSubtasks() {
+    public void removeAllSubtasks() throws ManagerSaveException {
         HashSet<Epic> epics = new HashSet<>();
         for (Subtask subtask : this.getSubtasks()) {
             Epic connectedEpic = this.epics.get(subtask.getEpicId());

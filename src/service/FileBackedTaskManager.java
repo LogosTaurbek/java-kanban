@@ -21,7 +21,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         this.backUpFilePath = backupFilePath;
     }
 
-    public static FileBackedTaskManager loadFromFile(File file) throws ManagerSaveException {
+    public FileBackedTaskManager loadFromFile(File file) throws ManagerSaveException {
         String rawBackUp = "";
         try {
             rawBackUp = Files.readString(file.toPath());
@@ -43,10 +43,12 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             } else {
                 tm.addTaskFromFile(taskFromStr);
             }
-            taskId = taskFromStr.getId();
+            if (taskFromStr.getId() > taskId) {
+                taskId = taskFromStr.getId();
+            }
 
         }
-        setTaskId(taskId);
+        setTaskId(taskId + 1);
         return tm;
     }
 
@@ -113,9 +115,24 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         this.save();
     }
 
-    protected void updateEpicStatus(Epic epic) {
-        super.updateEpicStatus(epic);
+    @Override
+    public void removeAllTasks() throws ManagerSaveException {
+        super.removeAllTasks();
+        this.save();
     }
+
+    @Override
+    public void removeAllEpics() throws ManagerSaveException {
+        super.removeAllEpics();
+        this.save();
+    }
+
+    @Override
+    public void removeAllSubtasks() throws ManagerSaveException {
+        super.removeAllSubtasks();
+        this.save();
+    }
+
 
     private void addTaskFromFile(Task task) {
         this.tasks.put(task.getId(), task);
@@ -129,8 +146,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         this.subtasks.put(subtask.getId(), subtask);
         for (Epic epic : this.getEpics()) {
             if (epic.getId() == subtask.getEpicId()) {
-                Epic connectedEpic = getEpicById(subtask.getEpicId());
-                connectedEpic.addSubtaskId(subtask.getId());
+                epic.addSubtaskId(subtask.getId());
             }
         }
 

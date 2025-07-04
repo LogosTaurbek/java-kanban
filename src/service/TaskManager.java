@@ -13,11 +13,11 @@ public interface TaskManager {
 
     List<Subtask> getSubtasks();
 
-    void removeAllTasks();
+    void removeAllTasks() throws ManagerSaveException;
 
-    void removeAllEpics();
+    void removeAllEpics() throws ManagerSaveException;
 
-    void removeAllSubtasks();
+    void removeAllSubtasks() throws ManagerSaveException;
 
     Task getTaskById(int id);
 
