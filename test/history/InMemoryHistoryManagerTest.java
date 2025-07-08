@@ -4,17 +4,15 @@ import model.Managers;
 import model.Task;
 import model.TaskStatus;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
-
-import service.ManagerSaveException;
 import service.TaskManager;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 public class InMemoryHistoryManagerTest {
     @Test
-    void hisotryManagerLinksTask() throws ManagerSaveException {
+    void hisotryManagerLinksTask() {
         Managers taskManagerUtil = new Managers();
         TaskManager taskManager = taskManagerUtil.getDefault();
         Task task = new Task("name v1", "descriptoin");
@@ -28,7 +26,7 @@ public class InMemoryHistoryManagerTest {
     }
 
     @Test
-    void historyManagerRemoveTask() throws ManagerSaveException {
+    void historyManagerRemoveTask() {
         Managers taskManagerUtil = new Managers();
         TaskManager taskManager = taskManagerUtil.getDefault();
         Task task = new Task("name v1", "description");
@@ -41,7 +39,7 @@ public class InMemoryHistoryManagerTest {
     }
 
     @Test
-    void historyManagerDoesNotDuplicateTask() throws ManagerSaveException {
+    void historyManagerDoesNotDuplicateTask() {
         Managers taskManagerUtil = new Managers();
         TaskManager taskManager = taskManagerUtil.getDefault();
         Task task = new Task("name v1", "description");

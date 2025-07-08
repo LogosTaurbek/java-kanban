@@ -2,12 +2,11 @@ import model.Epic;
 import model.Managers;
 import model.Subtask;
 import model.Task;
-import service.ManagerSaveException;
 import service.TaskManager;
 
 public class Main {
 
-    public static void main(String[] args) throws ManagerSaveException {
+    public static void main(String[] args) {
         System.out.println("Трекер задач");
 
         /* Create 2 task */

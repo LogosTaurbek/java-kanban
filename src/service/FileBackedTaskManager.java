@@ -21,7 +21,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         this.backUpFilePath = backupFilePath;
     }
 
-    public FileBackedTaskManager loadFromFile(File file) throws ManagerSaveException {
+    public static FileBackedTaskManager loadFromFile(File file) {
         String rawBackUp = "";
         try {
             rawBackUp = Files.readString(file.toPath());
@@ -48,27 +48,27 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             }
 
         }
-        setTaskId(taskId + 1);
+        tm.setTaskId(taskId);
         return tm;
     }
 
     /* Create */
     @Override
-    public int createTask(Task task) throws ManagerSaveException {
+    public int createTask(Task task) {
         super.createTask(task);
         this.save();
         return task.getId();
     }
 
     @Override
-    public int createEpic(Epic epic) throws ManagerSaveException {
+    public int createEpic(Epic epic) {
         super.createEpic(epic);
         this.save();
         return epic.getId();
     }
 
     @Override
-    public int createSubtask(Subtask subtask) throws ManagerSaveException {
+    public int createSubtask(Subtask subtask) {
         super.createSubtask(subtask);
         this.save();
         return subtask.getId();
@@ -78,19 +78,19 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     /* Update */
     @Override
-    public void updateTask(Task task) throws ManagerSaveException {
+    public void updateTask(Task task) {
         super.updateTask(task);
         this.save();
     }
 
     @Override
-    public void updateEpic(Epic epic) throws ManagerSaveException {
+    public void updateEpic(Epic epic) {
         super.updateEpic(epic);
         this.save();
     }
 
     @Override
-    public void updateSubtask(Subtask subtask) throws ManagerSaveException {
+    public void updateSubtask(Subtask subtask) {
         super.updateSubtask(subtask);
         this.save();
     }
@@ -98,37 +98,37 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     /* Remove */
     @Override
-    public void removeTaskById(int taskId) throws ManagerSaveException {
+    public void removeTaskById(int taskId) {
         super.removeTaskById(taskId);
         this.save();
     }
 
     @Override
-    public void removeEpicById(int epicId) throws ManagerSaveException {
+    public void removeEpicById(int epicId) {
         super.removeEpicById(epicId);
         this.save();
     }
 
     @Override
-    public void removeSubtaskById(int subtaskId) throws ManagerSaveException {
+    public void removeSubtaskById(int subtaskId) {
         super.removeSubtaskById(subtaskId);
         this.save();
     }
 
     @Override
-    public void removeAllTasks() throws ManagerSaveException {
+    public void removeAllTasks() {
         super.removeAllTasks();
         this.save();
     }
 
     @Override
-    public void removeAllEpics() throws ManagerSaveException {
+    public void removeAllEpics() {
         super.removeAllEpics();
         this.save();
     }
 
     @Override
-    public void removeAllSubtasks() throws ManagerSaveException {
+    public void removeAllSubtasks() {
         super.removeAllSubtasks();
         this.save();
     }
@@ -144,13 +144,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     private void addSubtaskFromFile(Subtask subtask) {
         this.subtasks.put(subtask.getId(), subtask);
-        for (Epic epic : this.getEpics()) {
-            if (epic.getId() == subtask.getEpicId()) {
-                epic.addSubtaskId(subtask.getId());
-            }
-        }
-
-
+        Epic epic = epics.get(subtask.getEpicId());
+        epic.addSubtaskId(subtask.getId());
     }
 
     private String taskToCSV(Task task) {
@@ -168,7 +163,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         return String.join(",", id, type, name, status, description, epic);
     }
 
-    private void save() throws ManagerSaveException {
+    private void save() {
         ArrayList<String> csvLines = new ArrayList<>();
         csvLines.add("id, type, name, status, descriptions, epic");
         for (Task task : this.getTasks()) {

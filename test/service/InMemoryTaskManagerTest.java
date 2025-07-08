@@ -17,7 +17,7 @@ class InMemoryTaskManagerTest {
     static int subtaskId1;
 
     @BeforeAll
-    static void initManagers() throws ManagerSaveException {
+    static void initManagers() {
         Managers taskManagerUtil = new Managers();
         taskManager = taskManagerUtil.getDefault();
 
@@ -32,7 +32,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void testAddTask() throws ManagerSaveException {
+    void testAddTask() {
         Task task = new Task("name", "description");
         taskManager.createTask(task);
         Task addedTask = taskManager.getTasks().getLast();
@@ -49,7 +49,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void testAddEpic() throws ManagerSaveException {
+    void testAddEpic() {
         Epic epic = new Epic("name", "description");
         taskManager.createEpic(epic);
         Epic addedEpic = taskManager.getEpics().getLast();
@@ -66,7 +66,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void testAddSubtask() throws ManagerSaveException {
+    void testAddSubtask() {
         Subtask subtask = new Subtask("name", "description", epicId1);
         taskManager.createSubtask(subtask);
         Subtask addedSubtask = taskManager.getSubtasks().getLast();
@@ -83,7 +83,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void testTaskIds() throws ManagerSaveException {
+    void testTaskIds() {
         Task task = new Task("task name 1", "task description 1");
         int id = taskManager.createTask(task);
 
@@ -94,7 +94,7 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    void testTaskDoesNotChangeAfterAdding() throws ManagerSaveException {
+    void testTaskDoesNotChangeAfterAdding() {
         Task task = new Task("task name", "task description");
         int id = taskManager.createTask(task);
         Task taskAdded = taskManager.getTaskById(id);

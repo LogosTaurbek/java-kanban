@@ -1,6 +1,6 @@
 package service;
 
-public class ManagerSaveException extends Exception {
+public class ManagerSaveException extends RuntimeException {
     private String exceptionMessage;
 
     public ManagerSaveException() {

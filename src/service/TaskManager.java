@@ -13,11 +13,11 @@ public interface TaskManager {
 
     List<Subtask> getSubtasks();
 
-    void removeAllTasks() throws ManagerSaveException;
+    void removeAllTasks();
 
-    void removeAllEpics() throws ManagerSaveException;
+    void removeAllEpics();
 
-    void removeAllSubtasks() throws ManagerSaveException;
+    void removeAllSubtasks();
 
     Task getTaskById(int id);
 
@@ -25,23 +25,23 @@ public interface TaskManager {
 
     Epic getEpicById(int id);
 
-    int createTask(Task newTask) throws ManagerSaveException;
+    int createTask(Task newTask);
 
-    int createSubtask(Subtask newSubtask) throws ManagerSaveException;
+    int createSubtask(Subtask newSubtask);
 
-    int createEpic(Epic newEpic) throws ManagerSaveException;
+    int createEpic(Epic newEpic);
 
-    void updateTask(Task newTask) throws ManagerSaveException;
+    void updateTask(Task newTask);
 
-    void updateSubtask(Subtask newSubtask) throws ManagerSaveException;
+    void updateSubtask(Subtask newSubtask);
 
-    void updateEpic(Epic newEpic) throws ManagerSaveException;
+    void updateEpic(Epic newEpic);
 
-    void removeTaskById(int idToRemove) throws ManagerSaveException;
+    void removeTaskById(int idToRemove);
 
-    void removeSubtaskById(int idToRemove) throws ManagerSaveException;
+    void removeSubtaskById(int idToRemove);
 
-    void removeEpicById(int idToRemove) throws ManagerSaveException;
+    void removeEpicById(int idToRemove);
 
     List<Subtask> getSubtasksByEpicId(int epicId);
 
