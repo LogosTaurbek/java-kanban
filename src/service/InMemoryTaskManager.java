@@ -2,8 +2,10 @@ package service;
 
 import history.HistoryManager;
 import model.*;
-
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class InMemoryTaskManager implements TaskManager {
 
@@ -12,6 +14,7 @@ public class InMemoryTaskManager implements TaskManager {
     protected Map<Integer, Subtask> subtasks;
     protected Map<Integer, Epic> epics;
     HistoryManager historyManager;
+    TreeSet<Task> prioritizedTasks;
 
     public InMemoryTaskManager() {
         taskId = 0;
@@ -20,6 +23,7 @@ public class InMemoryTaskManager implements TaskManager {
         epics = new HashMap<>();
         Managers managers = new Managers();
         this.historyManager = managers.getDefaultHistory();
+        this.prioritizedTasks = new TreeSet<>(Comparator.comparing(Task::getStartTime));
     }
 
     /* Get */
@@ -86,6 +90,13 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public List<Task> getHistory() {
         return this.historyManager.getHistory();
+    }
+
+    @Override
+    public List<Subtask> getSubtasksOfEpic(Epic epic) {
+        return epic.getSubtaskIds().stream()
+                .map(this::getSubtaskById)
+                .collect(Collectors.toList());
     }
 
     /* End Get */
@@ -262,6 +273,10 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     /* End Delete */
+    @Override
+    public ArrayList<Task> getPrioritizedTasks() {
+        return new ArrayList<>(this.prioritizedTasks);
+    }
 
 }
 
