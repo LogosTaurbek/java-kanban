@@ -1,8 +1,8 @@
 package model;
 
-import java.util.Objects;
-import java.time.LocalDateTime;
 import java.time.Duration;
+import java.time.LocalDateTime;
+import java.util.Objects;
 
 public class Task {
     protected int id;
@@ -19,8 +19,8 @@ public class Task {
         str += "title='" + this.name + "'";
         str += ", description='" + this.description + "'";
         str += ", status='" + this.status + "'";
-        str += ", startTime='"+this.startTime + "'";
-        str += ", duration='"+this.duration + "'";
+        str += ", startTime='" + this.startTime + "'";
+        str += ", duration='" + this.duration + "'";
         str += "}";
         return str;
     }
@@ -31,12 +31,20 @@ public class Task {
         this.status = TaskStatus.NEW;
     }
 
+
     public Task(String name, String description, LocalDateTime startTime, Duration duration) {
         this.name = name;
         this.description = description;
         this.status = TaskStatus.NEW;
         this.startTime = startTime;
         this.duration = duration;
+    }
+
+    public Task(int id, String name, String description, TaskStatus status) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.status = status;
     }
 
     public Task(int id, String name, String description, TaskStatus status, LocalDateTime startTime, Duration duration) {

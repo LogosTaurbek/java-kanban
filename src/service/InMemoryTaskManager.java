@@ -2,6 +2,7 @@ package service;
 
 import history.HistoryManager;
 import model.*;
+
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -196,8 +197,45 @@ public class InMemoryTaskManager implements TaskManager {
         } else {
             epic.setStatus(TaskStatus.IN_PROGRESS);
         }
+
+        this.updateEpicDurationInfo(epic);
     }
 
+    protected void updateEpicDurationInfo(Epic epicToUpdate) {
+        this.updateEpicStartTime(epicToUpdate);
+        this.updateEpicEndTime(epicToUpdate);
+        this.updateEpicDuration(epicToUpdate);
+    }
+
+    protected void updateEpicStartTime(Epic epicToUpdate) {
+        epicToUpdate.setStartTime(
+                epicToUpdate.getSubtaskIds().stream()
+                        .map(this::getSubtaskById)
+                        .map(Task::getStartTime)
+                        .filter(Objects::nonNull)
+                        .min(LocalDateTime::compareTo)
+                        .orElse(null)
+        );
+    }
+
+    protected void updateEpicEndTime(Epic epicToUpdate) {
+        epicToUpdate.setEndTime(
+                epicToUpdate.getSubtaskIds().stream()
+                        .map(this::getSubtaskById)
+                        .map(Task::getEndTime)
+                        .filter(Objects::nonNull)
+                        .max(LocalDateTime::compareTo)
+                        .orElse(null)
+        );
+    }
+
+    protected void updateEpicDuration(Epic epicToUpdate) {
+        if (epicToUpdate.getStartTime() == null || epicToUpdate.getEndTime() == null) {
+            epicToUpdate.setDuration(null);
+        } else {
+            epicToUpdate.setDuration(Duration.between(epicToUpdate.getStartTime(), epicToUpdate.getEndTime()));
+        }
+    }
     /* End update */
 
     /* Delete */

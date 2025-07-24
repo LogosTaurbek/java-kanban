@@ -1,4 +1,4 @@
-id, type, name, status, descriptions, epic, startTime,duration
+id, type, name, status, descriptions, epic
 1,model.Task,Задача 1,NEW,Описание задачи 1.,
 2,model.Task,Задача 2,NEW,Описание задачи 2.,
 3,model.Epic,Эпик 1,NEW,Описание эпика 1,
