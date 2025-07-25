@@ -120,7 +120,7 @@ public class Task {
         return Objects.equals(this.id, otherTask.getId());
     }
 
-    public boolean isOverLapped(Task otherTask) {
+    public boolean isOverlapped(Task otherTask) {
         LocalDateTime task1Start = this.getStartTime();
         LocalDateTime task1End = this.getEndTime();
         LocalDateTime task2Start = otherTask.getStartTime();

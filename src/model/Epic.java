@@ -17,9 +17,6 @@ public class Epic extends Task {
         super(id, name, description, status);
     }
 
-    public Epic(int id, String name, String description, TaskStatus status, ArrayList<Integer> subtasksIds) {
-        super(id, name, description, status);
-    }
 
     public Epic(String name, String description, LocalDateTime startTime, Duration duration) {
         super(name, description, startTime, duration);
@@ -30,9 +27,6 @@ public class Epic extends Task {
         super(id, name, description, status, startTime, duration);
     }
 
-    public Epic(int id, String name, String description, TaskStatus status, LocalDateTime startTime, Duration duration, ArrayList<Integer> subtasksIds) {
-        super(id, name, description, status, startTime, duration);
-    }
 
     @Override
     public String toString() {

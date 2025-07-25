@@ -136,6 +136,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     private void addTaskFromFile(Task task) {
         this.tasks.put(task.getId(), task);
+
     }
 
     private void addEpicFromFile(Epic newEpic) {
@@ -165,7 +166,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     private void save() {
         ArrayList<String> csvLines = new ArrayList<>();
-        csvLines.add("id, type, name, status, descriptions, epic");
+        csvLines.add("id, type, name, status, descriptions, epic, startTime, duration");
         for (Task task : this.getTasks()) {
             csvLines.add(this.taskToCSV(task));
         }
