@@ -10,7 +10,10 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
 
@@ -136,6 +139,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     private void addTaskFromFile(Task task) {
         this.tasks.put(task.getId(), task);
+        this.prioritizedTasks.add(task);
 
     }
 
@@ -145,6 +149,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     private void addSubtaskFromFile(Subtask subtask) {
         this.subtasks.put(subtask.getId(), subtask);
+        this.prioritizedTasks.add(subtask);
         Epic epic = epics.get(subtask.getEpicId());
         epic.addSubtaskId(subtask.getId());
     }
@@ -156,12 +161,20 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         String status = task.getStatus().name();
         String description = task.getDescription();
         String epic = "";
+        String startTime = "";
+        if(task.getStartTime() != null){
+            startTime = task.getStartTime().toString();
+        }
+        String duration = "";
+        if(task.getDuration() != null){
+            duration = task.getDuration().toString();
+        }
         if (type.equals("Subtask")) {
             Subtask st = (Subtask) task;
             epic = String.valueOf(st.getEpicId());
         }
 
-        return String.join(",", id, type, name, status, description, epic);
+        return String.join(",", id, type, name, status, description, epic, startTime, duration);
     }
 
     private void save() {
@@ -193,13 +206,22 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         String name = values[2];
         TaskStatus status = TaskStatus.valueOf(values[3]);
         String description = values[4];
-
+        LocalDateTime startTime = null;
+        String startTimeFromFile = values[6];
+        if(!Objects.equals(startTimeFromFile, "")){
+            startTime = LocalDateTime.parse(values[6]);
+        }
+        Duration duration = null;
+        String durationFromFile = values[7];
+        if(!Objects.equals(durationFromFile, "")){
+            duration = Duration.parse(values[7]);
+        }
         Task result = new Task(id, name, description, status);
         switch (type) {
-            case "Task" -> result = new Task(id, name, description, status);
-            case "Epic" -> result = new Epic(id, name, description, status);
+            case "Task" -> result = new Task(id, name, description, status, startTime, duration);
+            case "Epic" -> result = new Epic(id, name, description, status, startTime, duration);
             case "Subtask" -> {
-                int epicId = Integer.parseInt(values[3]);
+                int epicId = Integer.parseInt(values[5]);
                 result = new Subtask(id, name, description, status, epicId);
             }
         }

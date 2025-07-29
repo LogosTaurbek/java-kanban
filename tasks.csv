@@ -1,8 +1,0 @@
-id, type, name, status, descriptions, epic
-1,model.Task,Задача 1,NEW,Описание задачи 1.,
-2,model.Task,Задача 2,NEW,Описание задачи 2.,
-3,model.Epic,Эпик 1,NEW,Описание эпика 1,
-6,model.Epic,Эпик 2,NEW,Описание эпика 2,
-4,model.Subtask,Подзадача 1-1,NEW,Описание подзадачи 1-1.,
-5,model.Subtask,Подзадача 1-2,NEW,Описание подзадачи 1-2.,
-7,model.Subtask,Подзадача 2-1,NEW,Описание подзадачи 2-1.,

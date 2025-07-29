@@ -105,9 +105,11 @@ public class InMemoryTaskManager implements TaskManager {
     /* Create */
     @Override
     public int createTask(Task task) {
+        if(this.isConflictingTask(task)){
+            return -1;
+        }
         task.setId(this.getCurrentTaskId());
         this.tasks.put(task.getId(), task);
-        this.updatePrioritizedTasks();
         return task.getId();
     }
 
@@ -120,13 +122,13 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public int createSubtask(Subtask subtask) {
+
         Epic connectedEpic = this.epics.get(subtask.getEpicId());
-        if (connectedEpic != null) {
+        if (connectedEpic != null || !this.isConflictingTask(subtask)) {
             subtask.setId(this.getCurrentTaskId());
             this.subtasks.put(subtask.getId(), subtask);
             connectedEpic.addSubtaskId(subtask.getId());
-            this.updateEpicStatus(connectedEpic);
-            this.updatePrioritizedTasks();
+            this.updateEpicFields(connectedEpic);
         } else {
             return -1;
         }
@@ -139,11 +141,10 @@ public class InMemoryTaskManager implements TaskManager {
 
     @Override
     public void updateTask(Task task) {
-        if (this.tasks.get(task.getId()) == null) {
+        if (this.tasks.get(task.getId()) == null || !this.isConflictingTask(task)) {
             return;
         }
         this.tasks.put(task.getId(), task);
-        this.updatePrioritizedTasks();
     }
 
     @Override
@@ -162,14 +163,19 @@ public class InMemoryTaskManager implements TaskManager {
             return;
         }
         Subtask updatedSubtask = this.subtasks.get(subtask.getId());
-        if (updatedSubtask.getEpicId() == subtask.getEpicId()) {
+        if (updatedSubtask.getEpicId() == subtask.getEpicId() || !this.isConflictingTask(subtask)) {
             updatedSubtask.setName(subtask.getName());
             updatedSubtask.setDescription(subtask.getDescription());
             updatedSubtask.setStatus(subtask.getStatus());
             Epic epicToUpdate = this.epics.get(subtask.getEpicId());
-            this.updateEpicStatus(epicToUpdate);
-            this.updatePrioritizedTasks();
+            this.updateEpicFields(epicToUpdate);
         }
+    }
+
+    /* update Epic status and time fields */
+    protected void updateEpicFields(Epic epic){
+        this.updateEpicStatus(epic);
+        this.updateTimeAttributes(epic);
     }
 
     protected void updateEpicStatus(Epic epic) {
@@ -201,11 +207,9 @@ public class InMemoryTaskManager implements TaskManager {
         } else {
             epic.setStatus(TaskStatus.IN_PROGRESS);
         }
-
-        this.updateEpicDurationInfo(epic);
     }
 
-    protected void updateEpicDurationInfo(Epic epicToUpdate) {
+    protected void updateTimeAttributes(Epic epicToUpdate) {
         this.updateEpicStartTime(epicToUpdate);
         this.updateEpicEndTime(epicToUpdate);
         this.updateEpicDuration(epicToUpdate);
@@ -237,7 +241,16 @@ public class InMemoryTaskManager implements TaskManager {
         if (epicToUpdate.getStartTime() == null || epicToUpdate.getEndTime() == null) {
             epicToUpdate.setDuration(null);
         } else {
+           /* LocalDateTime endEpicTime = LocalDateTime.now();
+            for(Integer subtaskId : epicToUpdate.getSubtaskIds()){
+                Task task = this.subtasks.get(subtaskId);
+                if(task.getEndTime() != null){
+                    if(task.getEndTime().isAfter(endEpicTime)){
+                        endEpicTime = task.getEndTime();
+                    }
+                }
 
+            }*/
             epicToUpdate.setDuration(Duration.between(epicToUpdate.getStartTime(), epicToUpdate.getEndTime()));
         }
     }
@@ -249,7 +262,6 @@ public class InMemoryTaskManager implements TaskManager {
     public void removeTaskById(int taskId) {
         this.tasks.remove(taskId);
         this.historyManager.remove(taskId);
-        this.updatePrioritizedTasks();
     }
 
     @Override
@@ -263,7 +275,6 @@ public class InMemoryTaskManager implements TaskManager {
             }
             this.epics.remove(epicId);
             this.historyManager.remove(epicId);
-            this.updatePrioritizedTasks();
         }
     }
 
@@ -273,10 +284,9 @@ public class InMemoryTaskManager implements TaskManager {
         if (subtaskToRemove != null) {
             Epic epic = this.epics.get(subtaskToRemove.getEpicId());
             epic.removeSubtaskId(idToRemove);
-            this.updateEpicStatus(epic);
+            this.updateEpicFields(epic);
             this.subtasks.remove(idToRemove);
             this.historyManager.remove(idToRemove);
-            this.updatePrioritizedTasks();
         }
     }
 
@@ -286,7 +296,6 @@ public class InMemoryTaskManager implements TaskManager {
             this.historyManager.remove(task.getId());
         }
         this.tasks.clear();
-        this.updatePrioritizedTasks();
 
     }
 
@@ -300,7 +309,6 @@ public class InMemoryTaskManager implements TaskManager {
         }
         this.epics.clear();
         this.subtasks.clear();
-        this.updatePrioritizedTasks();
     }
 
     @Override
@@ -315,10 +323,9 @@ public class InMemoryTaskManager implements TaskManager {
         }
         for (Epic epic : this.getEpics()) {
             epic.removeAllSubtasks();
-            this.updateEpicStatus(epic);
+            this.updateEpicFields(epic);
         }
         this.subtasks.clear();
-        this.updatePrioritizedTasks();
     }
 
     /* End Delete */
@@ -327,7 +334,7 @@ public class InMemoryTaskManager implements TaskManager {
         return new ArrayList<>(this.prioritizedTasks);
     }
 
-    protected void updatePrioritizedTasks() {
+    /*protected void updatePrioritizedTasks() {
         for (Task task : this.getTasks()) {
             if (task.getStartTime() != null) {
                 this.prioritizedTasks.remove(task);
@@ -340,12 +347,14 @@ public class InMemoryTaskManager implements TaskManager {
                 this.prioritizedTasks.add(subtask);
             }
         }
-    }
+    }*/
 
     private boolean isConflictingTask(Task newTask) {
-        boolean hasTaskConflict = this.getTasks().stream()
+        boolean hasTaskConflict = this.getPrioritizedTasks().stream()
+                .filter(task -> task.getId() != newTask.getId())
                 .anyMatch(task -> task.isOverlapped(newTask));
         boolean hasSubtaskConflict = this.getSubtasks().stream()
+                .filter(subtask -> subtask.getId() != newTask.getId())
                 .anyMatch(subtask -> subtask.isOverlapped(newTask));
         return hasTaskConflict && hasSubtaskConflict;
     }
