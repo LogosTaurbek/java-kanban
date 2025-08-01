@@ -165,11 +165,11 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         String description = task.getDescription();
         String epic = "";
         String startTime = "";
-        if(task.getStartTime() != null){
+        if (task.getStartTime() != null) {
             startTime = task.getStartTime().toString();
         }
         String duration = "";
-        if(task.getDuration() != null){
+        if (task.getDuration() != null) {
             duration = task.getDuration().toString();
         }
         if (type.equals("Subtask")) {
@@ -211,12 +211,12 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         String description = values[4];
         LocalDateTime startTime = null;
         String startTimeFromFile = values[6];
-        if(!Objects.equals(startTimeFromFile, "")){
+        if (!Objects.equals(startTimeFromFile, "")) {
             startTime = LocalDateTime.parse(values[6]);
         }
         Duration duration = null;
         String durationFromFile = values[7];
-        if(!Objects.equals(durationFromFile, "")){
+        if (!Objects.equals(durationFromFile, "")) {
             duration = Duration.parse(values[7]);
         }
         Task result = new Task(id, name, description, status);
