@@ -105,7 +105,7 @@ public class InMemoryTaskManager implements TaskManager {
     /* Create */
     @Override
     public int createTask(Task task) {
-        if(this.isConflictingTask(task)){
+        if (this.isConflictingTask(task)) {
             return -1;
         }
         task.setId(this.getCurrentTaskId());
@@ -173,7 +173,7 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     /* update Epic status and time fields */
-    protected void updateEpicFields(Epic epic){
+    protected void updateEpicFields(Epic epic) {
         this.updateEpicStatus(epic);
         this.updateTimeAttributes(epic);
     }

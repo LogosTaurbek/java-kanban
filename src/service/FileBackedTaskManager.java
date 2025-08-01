@@ -139,8 +139,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     private void addTaskFromFile(Task task) {
         this.tasks.put(task.getId(), task);
-        this.prioritizedTasks.add(task);
-
+        if (task.getStartTime() != null) {
+            this.prioritizedTasks.add(task);
+        }
     }
 
     private void addEpicFromFile(Epic newEpic) {
@@ -149,7 +150,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     private void addSubtaskFromFile(Subtask subtask) {
         this.subtasks.put(subtask.getId(), subtask);
-        this.prioritizedTasks.add(subtask);
+        if (subtask.getStartTime() != null) {
+            this.prioritizedTasks.add(subtask);
+        }
         Epic epic = epics.get(subtask.getEpicId());
         epic.addSubtaskId(subtask.getId());
     }
@@ -200,7 +203,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     private Task fromString(String value) {
-        String[] values = value.split(",");
+        String[] values = value.split(",", -1);
         int id = Integer.parseInt(values[0]);
         String type = values[1];
         String name = values[2];
