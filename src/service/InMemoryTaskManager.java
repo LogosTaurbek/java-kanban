@@ -106,8 +106,9 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public int createTask(Task task) {
         if (this.isConflictingTask(task)) {
-            return -1;
+            throw new IllegalArgumentException("Конфликт приоритета задач!");
         }
+
         task.setId(this.getCurrentTaskId());
         this.tasks.put(task.getId(), task);
         if (task.getStartTime() != null) {
@@ -136,6 +137,9 @@ public class InMemoryTaskManager implements TaskManager {
             connectedEpic.addSubtaskId(subtask.getId());
             this.updateEpicFields(connectedEpic);
         } else {
+            if (this.isConflictingTask(subtask)) {
+                throw new IllegalArgumentException("Конфликт приоритета задач!");
+            }
             return -1;
         }
         return subtask.getId();
@@ -148,6 +152,9 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void updateTask(Task task) {
         if (this.tasks.get(task.getId()) == null || !this.isConflictingTask(task)) {
+            if (this.isConflictingTask(task)) {
+                throw new IllegalArgumentException("Конфликт приоритета задач!");
+            }
             return;
         }
         this.tasks.put(task.getId(), task);
@@ -161,6 +168,7 @@ public class InMemoryTaskManager implements TaskManager {
         }
         if (prioritizedTaskIndex > 0) {
             this.prioritizedTasks.remove(prioritizedTaskIndex);
+            this.prioritizedTasks.add(task);
         }
     }
 
@@ -181,6 +189,9 @@ public class InMemoryTaskManager implements TaskManager {
         }
         Subtask updatedSubtask = this.subtasks.get(subtask.getId());
         if (updatedSubtask.getEpicId() == subtask.getEpicId() || !this.isConflictingTask(subtask)) {
+            if (this.isConflictingTask(subtask)) {
+                throw new IllegalArgumentException("Конфликт приоритета задач!");
+            }
             updatedSubtask.setName(subtask.getName());
             updatedSubtask.setDescription(subtask.getDescription());
             updatedSubtask.setStatus(subtask.getStatus());
@@ -270,7 +281,12 @@ public class InMemoryTaskManager implements TaskManager {
             epicToUpdate.setDuration(null);
         } else {
             LocalDateTime endEpicTime = LocalDateTime.now();
+            Duration totalDuration = Duration.ofMinutes(0);
             for (Integer subtaskId : epicToUpdate.getSubtaskIds()) {
+                Subtask subtask = this.subtasks.get(subtaskId);
+                Duration duration = subtask.getDuration();
+
+                totalDuration = totalDuration.plus(duration);
                 Task task = this.subtasks.get(subtaskId);
                 if (task.getEndTime() != null) {
                     if (task.getEndTime().isAfter(endEpicTime)) {
@@ -279,7 +295,7 @@ public class InMemoryTaskManager implements TaskManager {
                 }
 
             }
-            epicToUpdate.setDuration(Duration.between(epicToUpdate.getStartTime(), epicToUpdate.getEndTime()));
+            epicToUpdate.setDuration(totalDuration);
         }
     }
     /* End update */
@@ -290,6 +306,7 @@ public class InMemoryTaskManager implements TaskManager {
     public void removeTaskById(int taskId) {
         this.tasks.remove(taskId);
         this.historyManager.remove(taskId);
+        this.prioritizedTasks.remove(taskId);
     }
 
     @Override
@@ -300,6 +317,7 @@ public class InMemoryTaskManager implements TaskManager {
             for (int subtaskId : subtaskIds) {
                 this.subtasks.remove(subtaskId);
                 this.historyManager.remove(subtaskId);
+                this.prioritizedTasks.remove(subtaskId);
             }
             this.epics.remove(epicId);
             this.historyManager.remove(epicId);
@@ -314,6 +332,7 @@ public class InMemoryTaskManager implements TaskManager {
             epic.removeSubtaskId(idToRemove);
             this.updateEpicFields(epic);
             this.subtasks.remove(idToRemove);
+            this.prioritizedTasks.remove(idToRemove);
             this.historyManager.remove(idToRemove);
         }
     }
