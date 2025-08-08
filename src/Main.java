@@ -11,7 +11,9 @@ public class Main {
 
         /* Create 2 task */
         Managers taskManagerUtil = new Managers();
-        TaskManager taskManager = taskManagerUtil.getDefault();
+        //TaskManager taskManager = taskManagerUtil.getDefault();
+
+        TaskManager taskManager = taskManagerUtil.getFileBackedTaskManager("tasks.csv");
 
         Task task1 = new Task("Задача 1", "Описание задачи 1.");
         int task1Id = taskManager.createTask(task1);

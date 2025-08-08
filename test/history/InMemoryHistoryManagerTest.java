@@ -4,12 +4,11 @@ import model.Managers;
 import model.Task;
 import model.TaskStatus;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
-
 import service.TaskManager;
 
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class InMemoryHistoryManagerTest {
     @Test
