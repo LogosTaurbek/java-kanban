@@ -38,7 +38,7 @@ public class EpicsHandler extends BaseHttpHandler implements HttpHandler {
                 int epicId = this.getTaskIdFromRequestPath(requestPath);
                 Epic epic = this.taskManager.getEpicById(epicId);
                 if (epic == null) {
-                    this.sendNotFound(exchange, "Запрошенный эпик не найден.");
+                    this.sendNotFound(exchange, "Запрошенный Эпик не найден.");
                 } else {
                     this.sendText(exchange, this.taskManager.getSubtasksOfEpic(epic).toString());
                 }
