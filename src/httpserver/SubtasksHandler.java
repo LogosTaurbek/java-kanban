@@ -19,12 +19,12 @@ public class SubtasksHandler extends BaseHttpHandler implements HttpHandler {
     public void handle(HttpExchange exchange) throws IOException {
         String requestPath = exchange.getRequestURI().getPath();
         switch (this.getEndpoint(exchange.getRequestMethod(), requestPath)) {
-            case SubtasksEndpoint.GET: {
+            case SubtasksEndpoint.GET:{
                 String result = this.taskManager.getSubtasks().toString();
                 this.sendText(exchange, result);
                 break;
             }
-            case SubtasksEndpoint.GET_ID: {
+            case SubtasksEndpoint.GET_ID:{
                 int subtaskId = this.getTaskIdFromRequestPath(requestPath);
                 Subtask subtask = this.taskManager.getSubtaskById(subtaskId);
                 if (subtask == null) {
