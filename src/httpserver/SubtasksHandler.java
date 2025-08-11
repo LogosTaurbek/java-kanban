@@ -39,6 +39,8 @@ public class SubtasksHandler extends BaseHttpHandler implements HttpHandler {
                 String body = new String(requestBody.readAllBytes(), StandardCharsets.UTF_8);
                 Gson taskAdaptedGson = HttpTaskServer.getTaskAdaptedGson();
                 Subtask subtask = taskAdaptedGson.fromJson(body, Subtask.class);
+                // проверить есть ли ID,
+                // вызвать нужный метод
                 if (subtask.getId() == 0) {
                     int newSubtaskId = this.taskManager.createSubtask(subtask);
                     if (newSubtaskId == -1) {
