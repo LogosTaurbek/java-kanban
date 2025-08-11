@@ -2,12 +2,12 @@ package httpservertests;
 
 import com.google.gson.Gson;
 import httpserver.HttpTaskServer;
+import model.Task;
+import model.TaskStatus;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import service.InMemoryTaskManager;
-import model.TaskStatus;
-import model.Task;
 import service.TaskManager;
 
 import java.io.IOException;
@@ -22,7 +22,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class HttpTaskManagerTasksTest{
+public class HttpTaskManagerTasksTest {
     // создаём экземпляр InMemoryTaskManager
     TaskManager manager = new InMemoryTaskManager();
     // передаём его в качестве аргумента в конструктор HttpTaskServer
