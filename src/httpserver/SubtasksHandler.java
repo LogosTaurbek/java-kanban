@@ -35,10 +35,8 @@ public class SubtasksHandler extends BaseHttpHandler implements HttpHandler {
                 break;
             }
             case SubtasksEndpoint.POST: {
-                // получить данные,
                 InputStream requestBody = exchange.getRequestBody();
                 String body = new String(requestBody.readAllBytes(), StandardCharsets.UTF_8);
-                // конвертировать их в Subtask,
                 Gson taskAdaptedGson = HttpTaskServer.getTaskAdaptedGson();
                 Subtask subtask = taskAdaptedGson.fromJson(body, Subtask.class);
                 // проверить есть ли ID,
