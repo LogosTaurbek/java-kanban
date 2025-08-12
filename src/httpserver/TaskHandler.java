@@ -48,8 +48,7 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
                 if (task.getId() == 0) {
                     try {
                         newTaskId = this.taskManager.createTask(task);
-                    }
-                    catch(IllegalArgumentException e){
+                    } catch (IllegalArgumentException e) {
                         this.sendHasInteractions(exchange, "Срок выполнения новой задачи пересекается с существующими задачами или подзадачами.");
                     }
                     this.sendCreatedWithId(exchange, String.valueOf(newTaskId));
