@@ -55,7 +55,8 @@ public class EpicsHandler extends BaseHttpHandler implements HttpHandler {
                 // вызвать нужный метод
                 if (epic.getId() == 0) {
                     int newEpicId = this.taskManager.createEpic(epic);
-                    this.sendCreated(exchange);
+                    this.sendCreatedWithId(exchange, String.valueOf(newEpicId));
+
                 } else {
                     this.taskManager.updateEpic(epic);
                     this.sendCreated(exchange);

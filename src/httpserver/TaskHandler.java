@@ -44,12 +44,15 @@ public class TaskHandler extends BaseHttpHandler implements HttpHandler {
                 Task task = taskAdaptedGson.fromJson(body, Task.class);
                 // проверить есть ли ID,
                 // вызвать нужный метод
+                int newTaskId = -1;
                 if (task.getId() == 0) {
-                    int newTaskId = this.taskManager.createTask(task);
-                    if (newTaskId == -1) {
+                    try {
+                        newTaskId = this.taskManager.createTask(task);
+                    }
+                    catch(IllegalArgumentException e){
                         this.sendHasInteractions(exchange, "Срок выполнения новой задачи пересекается с существующими задачами или подзадачами.");
                     }
-                    this.sendCreated(exchange);
+                    this.sendCreatedWithId(exchange, String.valueOf(newTaskId));
                 } else {
                     this.taskManager.updateTask(task);
                     this.sendCreated(exchange);

@@ -41,12 +41,15 @@ public class SubtasksHandler extends BaseHttpHandler implements HttpHandler {
                 Subtask subtask = taskAdaptedGson.fromJson(body, Subtask.class);
                 // проверить есть ли ID,
                 // вызвать нужный метод
+                int newSubtaskId = -1;
                 if (subtask.getId() == 0) {
-                    int newSubtaskId = this.taskManager.createSubtask(subtask);
-                    if (newSubtaskId == -1) {
+                    try{
+                        newSubtaskId = this.taskManager.createSubtask(subtask);
+                    }
+                     catch(IllegalArgumentException e) {
                         this.sendHasInteractions(exchange, "Срок выполнения новой подзадачи пересекается с существующими задачами или подзадачами.");
                     }
-                    this.sendCreated(exchange);
+                    this.sendCreatedWithId(exchange, String.valueOf(newSubtaskId));
                 } else {
                     this.taskManager.updateSubtask(subtask);
                     this.sendCreated(exchange);
