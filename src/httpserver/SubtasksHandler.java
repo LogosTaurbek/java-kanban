@@ -43,10 +43,9 @@ public class SubtasksHandler extends BaseHttpHandler implements HttpHandler {
                 // вызвать нужный метод
                 int newSubtaskId = -1;
                 if (subtask.getId() == 0) {
-                    try{
+                    try {
                         newSubtaskId = this.taskManager.createSubtask(subtask);
-                    }
-                     catch(IllegalArgumentException e) {
+                    } catch (IllegalArgumentException e) {
                         this.sendHasInteractions(exchange, "Срок выполнения новой подзадачи пересекается с существующими задачами или подзадачами.");
                     }
                     this.sendCreatedWithId(exchange, String.valueOf(newSubtaskId));
